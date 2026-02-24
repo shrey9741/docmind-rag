@@ -1,0 +1,430 @@
+/*
+styles/main.css
+===============
+All CSS styles for DocMind RAG Application.
+This file uses {PLACEHOLDER} tokens that are replaced at runtime
+with the correct theme colors by ui/theme.py.
+
+Fonts: Cabinet Grotesk (headings) + JetBrains Mono (body)
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+/* ── Reset & Base ────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body, [class*="css"] {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 14px;
+}
+
+.stApp {
+    background: {BG_PRIMARY} !important;
+    color: {TEXT_PRIMARY} !important;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Hide Streamlit default branding */
+#MainMenu, footer, header { visibility: hidden; }
+.stDeployButton { display: none; }
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+[data-testid="stSidebar"] {
+    background: {SIDEBAR_BG} !important;
+    border-right: 1px solid {BORDER} !important;
+}
+[data-testid="stSidebar"] > div {
+    padding: 1.5rem 1rem;
+}
+[data-testid="stSidebar"] * {
+    color: {TEXT_PRIMARY} !important;
+}
+
+/* ── File Uploader ───────────────────────────────────────────────────────── */
+[data-testid="stFileUploader"] {
+    background: {BG_CARD} !important;
+    border: 2px dashed {BORDER} !important;
+    border-radius: 12px !important;
+    transition: border-color 0.2s;
+}
+[data-testid="stFileUploader"] > div {
+    background: {BG_CARD} !important;
+    border-radius: 12px !important;
+}
+[data-testid="stFileUploader"] section {
+    background: {BG_CARD} !important;
+    border: none !important;
+    border-radius: 12px !important;
+}
+[data-testid="stFileUploaderDropzone"] {
+    background: {BG_CARD} !important;
+    border: 2px dashed {BORDER} !important;
+    border-radius: 12px !important;
+}
+[data-testid="stFileUploaderDropzone"]:hover {
+    border-color: {ACCENT} !important;
+    background: {ACCENT_GLOW} !important;
+}
+[data-testid="stFileUploaderDropzone"] span,
+[data-testid="stFileUploaderDropzone"] p {
+    color: {TEXT_SECONDARY} !important;
+}
+[data-testid="stFileUploaderDropzone"] small {
+    color: {TEXT_MUTED} !important;
+}
+[data-testid="stFileUploaderDropzone"] button {
+    background: {BG_INPUT} !important;
+    color: {TEXT_PRIMARY} !important;
+    border: 1px solid {BORDER} !important;
+    border-radius: 8px !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.8rem !important;
+    box-shadow: none !important;
+    transition: all 0.2s !important;
+}
+[data-testid="stFileUploaderDropzone"] button:hover {
+    border-color: {ACCENT} !important;
+    color: {ACCENT} !important;
+    background: {ACCENT_GLOW} !important;
+    transform: none !important;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.stButton > button {
+    font-family: 'Cabinet Grotesk', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 0.82rem !important;
+    background: {ACCENT} !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0.55rem 1.2rem !important;
+    letter-spacing: 0.02em !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 4px 15px {ACCENT_GLOW} !important;
+}
+.stButton > button:hover {
+    background: {ACCENT_LIGHT} !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px {ACCENT_GLOW} !important;
+}
+.stButton > button:active {
+    transform: translateY(0px) !important;
+}
+
+/* ── Form Submit Button ──────────────────────────────────────────────────── */
+.stFormSubmitButton > button {
+    font-family: 'Cabinet Grotesk', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 0.9rem !important;
+    background: linear-gradient(135deg, {ACCENT}, {ACCENT_LIGHT}) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 0.65rem 1.5rem !important;
+    width: 100% !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 4px 20px {ACCENT_GLOW} !important;
+}
+.stFormSubmitButton > button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 30px {ACCENT_GLOW} !important;
+}
+
+/* ── Download Button ─────────────────────────────────────────────────────── */
+.stDownloadButton > button {
+    font-family: 'Cabinet Grotesk', sans-serif !important;
+    font-weight: 700 !important;
+    background: transparent !important;
+    color: {ACCENT} !important;
+    border: 2px solid {ACCENT} !important;
+    border-radius: 10px !important;
+    transition: all 0.2s !important;
+}
+.stDownloadButton > button:hover {
+    background: {ACCENT_GLOW} !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ── Text Input ──────────────────────────────────────────────────────────── */
+.stTextInput > div > div > input {
+    background: {BG_INPUT} !important;
+    border: 2px solid {BORDER} !important;
+    border-radius: 12px !important;
+    color: {TEXT_PRIMARY} !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.88rem !important;
+    padding: 0.7rem 1rem !important;
+    transition: all 0.2s ease !important;
+}
+.stTextInput > div > div > input:focus {
+    border-color: {ACCENT} !important;
+    box-shadow: 0 0 0 3px {ACCENT_GLOW} !important;
+    outline: none !important;
+}
+.stTextInput > div > div > input::placeholder {
+    color: {TEXT_MUTED} !important;
+}
+
+/* ── Metric Cards ────────────────────────────────────────────────────────── */
+[data-testid="stMetric"] {
+    background: {METRIC_BG} !important;
+    border: 1px solid {BORDER} !important;
+    border-radius: 16px !important;
+    padding: 1.2rem 1.4rem !important;
+    box-shadow: 0 4px 20px {SHADOW} !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+}
+[data-testid="stMetric"]:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 30px {SHADOW} !important;
+}
+[data-testid="stMetricLabel"] {
+    color: {TEXT_SECONDARY} !important;
+    font-size: 0.72rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+}
+[data-testid="stMetricValue"] {
+    color: {ACCENT} !important;
+    font-family: 'Cabinet Grotesk', sans-serif !important;
+    font-size: 2rem !important;
+    font-weight: 900 !important;
+}
+
+/* ── Toggle ──────────────────────────────────────────────────────────────── */
+[data-testid="stToggle"] p {
+    color: {TEXT_SECONDARY} !important;
+    font-size: 0.75rem !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* ── Expander ────────────────────────────────────────────────────────────── */
+[data-testid="stExpander"] {
+    background: {BG_CARD} !important;
+    border: 1px solid {BORDER} !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+}
+[data-testid="stExpander"] summary {
+    color: {TEXT_SECONDARY} !important;
+    font-size: 0.8rem !important;
+}
+
+/* ── Alerts ──────────────────────────────────────────────────────────────── */
+.stSuccess {
+    background: {GREEN_BG} !important;
+    border: 1px solid {GREEN} !important;
+    border-radius: 10px !important;
+    color: {GREEN} !important;
+}
+.stError {
+    background: rgba(255,94,94,0.08) !important;
+    border: 1px solid {RED} !important;
+    border-radius: 10px !important;
+}
+.stInfo {
+    background: {ACCENT_GLOW} !important;
+    border: 1px solid {ACCENT} !important;
+    border-radius: 10px !important;
+}
+
+/* ── Divider ─────────────────────────────────────────────────────────────── */
+hr {
+    border-color: {BORDER} !important;
+    margin: 1rem 0 !important;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: {BORDER}; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: {ACCENT}; }
+
+/* ── Logo ────────────────────────────────────────────────────────────────── */
+.logo-text {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, {ACCENT}, {GREEN});
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ── Hero Section ────────────────────────────────────────────────────────── */
+.hero-title {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    color: {TEXT_PRIMARY};
+}
+.hero-accent {
+    background: linear-gradient(135deg, {ACCENT}, {GREEN});
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.hero-sub {
+    color: {TEXT_SECONDARY};
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+    line-height: 1.5;
+}
+
+/* ── Section Labels ──────────────────────────────────────────────────────── */
+.section-label {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: {TEXT_MUTED};
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: {BORDER};
+}
+
+/* ── Status Badges ───────────────────────────────────────────────────────── */
+.badge-ready {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: {GREEN_BG};
+    color: {GREEN};
+    border: 1px solid {GREEN};
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.75rem;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+}
+.badge-empty {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: {AMBER_BG};
+    color: {AMBER};
+    border: 1px solid {AMBER};
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.75rem;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+}
+
+/* ── Source Chips ────────────────────────────────────────────────────────── */
+.source-chip {
+    display: inline-block;
+    background: {ACCENT_GLOW};
+    border: 1px solid {ACCENT};
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 0.68rem;
+    margin: 3px 3px 0 0;
+    color: {ACCENT};
+    font-weight: 500;
+}
+
+/* ── Chat Bubbles ────────────────────────────────────────────────────────── */
+.user-msg {
+    background: {USER_BG};
+    border: 1px solid {USER_BORDER};
+    border-radius: 18px 18px 4px 18px;
+    padding: 1rem 1.2rem;
+    margin: 0.6rem 0 0.6rem auto;
+    max-width: 80%;
+    text-align: right;
+    box-shadow: 0 4px 15px {SHADOW};
+    color: {TEXT_PRIMARY};
+    font-size: 0.88rem;
+    line-height: 1.6;
+    animation: slideInRight 0.3s ease;
+}
+.bot-msg {
+    background: {BOT_BG};
+    border: 1px solid {BOT_BORDER};
+    border-radius: 18px 18px 18px 4px;
+    padding: 1rem 1.2rem;
+    margin: 0.6rem auto 0.6rem 0;
+    max-width: 80%;
+    box-shadow: 0 4px 15px {SHADOW};
+    color: {TEXT_PRIMARY};
+    font-size: 0.88rem;
+    line-height: 1.6;
+    animation: slideInLeft 0.3s ease;
+}
+.msg-label {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    opacity: 0.5;
+}
+
+/* ── Empty State ─────────────────────────────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: {TEXT_MUTED};
+    font-size: 0.85rem;
+    line-height: 1.8;
+}
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+    opacity: 0.4;
+}
+
+/* ── Context Chunk Cards ─────────────────────────────────────────────────── */
+.chunk-card {
+    background: {BG_PRIMARY};
+    border: 1px solid {BORDER};
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.78rem;
+    color: {TEXT_SECONDARY};
+    line-height: 1.6;
+}
+.chunk-num {
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: {TEXT_MUTED};
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+}
+
+/* ── Animations ──────────────────────────────────────────────────────────── */
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.4s ease; }
