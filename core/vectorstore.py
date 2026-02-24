@@ -51,7 +51,7 @@ def build_vector_store(texts: list, metadatas: list):
     Returns:
         FAISS vector store object, or None if no chunks were created
     """
-    from langchain.text_splitter import RecursiveCharacterTextSplitter
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
     from langchain_community.vectorstores import FAISS
 
     # ── Step 1: Split into chunks ─────────────────────────────────────────────
