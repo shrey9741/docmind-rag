@@ -3,7 +3,6 @@ utils/helpers.py
 ================
 Utility / helper functions used by the Streamlit UI.
 Kept separate from core logic to maintain clean separation of concerns.
-
 Functions:
 - generate_suggested_questions : uses LLM to suggest questions from document
 - build_chat_export            : converts chat history to downloadable text
@@ -17,18 +16,17 @@ def generate_suggested_questions(text: str) -> list:
     Use Flan-T5 to generate 3 suggested questions based on document content.
     Cached by document text so the LLM is only called ONCE per unique document —
     subsequent reruns (button clicks, theme toggles, etc.) return instantly.
-
     Args:
-        text : first document's extracted text (first 2000 chars used)
+        text : first document's extracted text (first 1500 chars used)
     Returns:
         list of up to 3 question strings
     """
     llm = load_llm()
     prompt = (
-        "Read the following document and suggest exactly 3 short, interesting questions "
-        "a user might want to ask about it. Write one question per line, no numbering:\n\n"
-        + text[:2000]
-        + "\n\nQuestions:"
+        "Given this document, write 3 simple factual questions someone might ask. "
+        "Each question must be clear and answerable from the text. "
+        "Format: one question per line, no numbering, no extra text.\n\n"
+        "Document:\n" + text[:1500] + "\n\nQuestions:"
     )
     result    = llm.invoke(prompt).strip()
     questions = [q.strip() for q in result.split("\n") if q.strip()]
@@ -37,7 +35,6 @@ def generate_suggested_questions(text: str) -> list:
 def build_chat_export(chat_history: list) -> str:
     """
     Convert the chat history list into a plain text string for download.
-
     Args:
         chat_history : list of message dicts with role and content keys
     Returns:
