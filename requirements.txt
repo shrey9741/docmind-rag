@@ -11,19 +11,19 @@ langchain-text-splitters==0.2.4
 transformers==4.41.0
 sentence-transformers==3.0.1
 huggingface-hub==0.23.0
-tokenizers==0.19.1
+tokenizers==0.21.0
 
 # ── Vector store ─────────────────────────────────────────────────────────────
-faiss-cpu==1.13.0           # use faiss-gpu if you have a CUDA GPU
+faiss-cpu==1.13.0
 
 # ── Document parsing ─────────────────────────────────────────────────────────
-PyPDF2==3.0.1              # PDF extraction
-python-docx==1.1.0         # DOCX extraction
+PyPDF2==3.0.1
+python-docx==1.1.0
 
 # ── ML / numerics ────────────────────────────────────────────────────────────
-torch==2.3.0               # CPU build is fine; pip installs CPU by default
+torch==2.5.0
 numpy==1.26.4
 
 # ── Misc ─────────────────────────────────────────────────────────────────────
-accelerate==0.30.0         # speeds up model loading
+accelerate==0.30.0
 python-dotenv==1.0.1
