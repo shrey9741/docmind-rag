@@ -3,9 +3,9 @@
 > Upload any document. Ask anything. Get grounded answers instantly — 100% offline, zero API cost.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue?style=flat-square&logo=python)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.35+-red?style=flat-square&logo=streamlit)
-![LangChain](https://img.shields.io/badge/LangChain-0.2+-green?style=flat-square)
-![FAISS](https://img.shields.io/badge/FAISS-1.8+-orange?style=flat-square)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.36+-red?style=flat-square&logo=streamlit)
+![LangChain](https://img.shields.io/badge/LangChain-0.3+-green?style=flat-square)
+![FAISS](https://img.shields.io/badge/FAISS-1.13+-orange?style=flat-square)
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-Transformers-yellow?style=flat-square&logo=huggingface)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=flat-square)
 
@@ -24,6 +24,7 @@
 - [Configuration](#configuration)
 - [Deployment](#deployment)
 - [Limitations](#limitations)
+- [Changelog](#changelog)
 - [Future Improvements](#future-improvements)
 
 ---
@@ -96,7 +97,7 @@ Unlike general chatbots that hallucinate answers from training data, DocMind ans
 - **100% Offline** — After first model download, no internet required ever
 - **Zero API Cost** — No OpenAI, no Anthropic, no paid APIs of any kind
 - **Persistent Vector Store** — FAISS index saved to disk, survives app restarts
-- **Suggested Questions** — Auto-generated questions after document indexing
+- **Suggested Questions** — Auto-generated questions after document indexing, cached per document
 - **Chat Export** — Download your entire conversation as a .txt file
 - **Analytics Dashboard** — Real-time metrics: docs indexed, chunks stored, questions asked
 - **Dark / Light Mode** — Toggle between themes with smooth transitions
@@ -146,15 +147,15 @@ docmind-rag/
 
 | Component | Technology | Purpose |
 |---|---|---|
-| UI Framework | Streamlit | Interactive web application |
-| Orchestration | LangChain | Connects all pipeline components |
+| UI Framework | Streamlit 1.36 | Interactive web application |
+| Orchestration | LangChain 0.3 | Connects all pipeline components |
 | Embedding Model | all-MiniLM-L6-v2 | Converts text to 384-dim vectors |
-| Vector Database | FAISS (Facebook AI) | Fast similarity search on embeddings |
+| Vector Database | FAISS 1.13 | Fast similarity search on embeddings |
 | Language Model | Google Flan-T5-base | Answer generation from context |
 | PDF Extraction | PyPDF2 | Reads and extracts text from PDFs |
 | DOCX Extraction | python-docx | Reads Word document paragraphs |
 | Text Splitting | RecursiveCharacterTextSplitter | Intelligent document chunking |
-| Model Hub | HuggingFace Hub | Downloads and caches models locally |
+| Model Hub | HuggingFace Hub 0.27 | Downloads and caches models locally |
 
 ---
 
@@ -169,7 +170,7 @@ docmind-rag/
 ### Step 1 — Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/docmind-rag.git
+git clone https://github.com/shrey9741/docmind-rag.git
 cd docmind-rag
 ```
 
@@ -197,7 +198,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-> **Note:** This installs ~15 packages including PyTorch. May take 5-10 minutes depending on internet speed.
+> **Note:** This installs ~111 packages including PyTorch. May take 5-10 minutes depending on internet speed.
 
 ### Step 4 — Run the App
 
@@ -223,7 +224,7 @@ Click **⚡ Process & Index**. The app will:
 - Split it into chunks
 - Generate embeddings
 - Save the FAISS index to disk
-- Auto-generate 3 suggested questions
+- Auto-generate 3 suggested questions (cached — runs only once per unique document)
 
 ### Step 3 — Ask Questions
 Type your question in the input box at the bottom and click **Send →**
@@ -268,6 +269,26 @@ Best tradeoff for CPU deployment:
 - Instruction-tuned — follows "answer only from context" instruction reliably
 - 250MB — manageable size for CPU inference
 
+### Caching Strategy
+
+Performance is optimised using Streamlit's caching decorators:
+
+```python
+# Embedding model — loaded once, reused for all documents
+@st.cache_resource
+def get_embeddings(): ...
+
+# LLM — loaded once, reused for all queries
+@st.cache_resource
+def load_llm(): ...
+
+# Suggested questions — generated once per unique document, never re-runs on rerun
+@st.cache_data
+def generate_suggested_questions(text: str): ...
+```
+
+This ensures models are never reloaded on Streamlit reruns (button clicks, theme toggles, etc.), keeping the app fast after the initial load.
+
 ### Chunking Strategy
 
 ```
@@ -302,6 +323,8 @@ This dual instruction — answer only from context + admit when unknown — prev
 ```
 
 At runtime, `app.py` reads the CSS file, replaces each `{PLACEHOLDER}` with actual hex values from `ui/theme.py`, and injects the styled CSS — completely decoupling styling from Python logic.
+
+> **Note for VSCode users:** The `{PLACEHOLDER}` tokens will show CSS lint errors in the editor. This is expected — they are replaced at runtime and do not affect functionality. To silence them, add `.vscode/settings.json` with `{ "css.validate": false }`.
 
 ---
 
@@ -344,9 +367,9 @@ git push
 
 **Step 3** — Click **New App** and configure:
 ```
-Repository  : yourusername/docmind-rag
+Repository  : shrey9741/docmind-rag
 Branch      : main
-Main file   : app.py
+Main module : app.py
 ```
 
 **Step 4** — Click **Deploy** and wait 5-10 minutes for model downloads
@@ -358,6 +381,8 @@ https://docmind-rag.streamlit.app/
 
 > **Note:** The `vector_store/` folder is gitignored. Users of the deployed app must upload and index their own documents.
 
+> **Dependency note:** `numpy` must NOT be pinned explicitly in `requirements.txt`. LangChain 0.3 on Python 3.12+ requires `numpy<2.0.0` and will resolve a compatible version (1.26.x) automatically.
+
 ---
 
 ## Limitations
@@ -367,9 +392,27 @@ https://docmind-rag.streamlit.app/
 | Answer Quality | Flan-T5-base is small — answers may be short or incomplete |
 | No Memory | Each question is independent — no multi-turn conversation context |
 | Scanned PDFs | PyPDF2 cannot extract text from image-based scanned PDFs |
-| Speed | CPU inference takes 5-15 seconds per query |
+| Speed | CPU inference takes 5-15 seconds per query on cold start |
 | Scale | FAISS flat index slows down with millions of documents |
 | No Auth | No user authentication — single shared knowledge base |
+| Free Tier RAM | Streamlit Cloud free tier has ~1GB RAM — avoid files larger than 5MB |
+
+---
+
+## Changelog
+
+### v1.1.0 — Performance & Bug Fixes
+- **Fixed:** `numpy==2.1.0` pin removed from `requirements.txt` — was causing `ResolutionImpossible` error on Streamlit Cloud (LangChain 0.3 requires `numpy<2.0.0` on Python 3.12+)
+- **Fixed:** `@st.cache_data` added to `generate_suggested_questions()` — previously re-ran the LLM on every Streamlit interaction, causing major slowdowns
+- **Fixed:** Sidebar collapse button was permanently hidden after clicking due to `header { visibility: hidden }` CSS rule — fixed by explicitly keeping `[data-testid="collapsedControl"]` visible
+- **Improved:** Suggested questions prompt rewritten for better output quality — Flan-T5 now generates clearer, more factual questions from document content
+- **Improved:** Updated `HuggingFaceEmbeddings` and `HuggingFacePipeline` imports to use `langchain_huggingface` package — silences LangChain deprecation warnings
+
+### v1.0.0 — Initial Release
+- Full RAG pipeline with FAISS vector store
+- Flan-T5-base for answer generation
+- Dark/light theme system
+- Suggested questions, chat export, analytics dashboard
 
 ---
 
@@ -392,8 +435,8 @@ https://docmind-rag.streamlit.app/
 **Shrey** — Built as a learning project to understand RAG pipelines end to end.
 
 - GitHub: [shrey9741](https://github.com/shrey9741)
-- LinkedIn: (https://linkedin.com/in/shrey-kumar)
-- Live Demo: (https://docmind-rag.streamlit.app/)
+- LinkedIn: [shrey-kumar](https://linkedin.com/in/shrey-kumar)
+- Live Demo: [docmind-rag.streamlit.app](https://docmind-rag.streamlit.app/)
 
 ---
 
