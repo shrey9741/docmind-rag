@@ -27,7 +27,15 @@ html, body, [class*="css"] {
 }
 
 /* Hide Streamlit default branding */
-#MainMenu, footer, header { visibility: hidden; }
+#MainMenu, footer { visibility: hidden; }
+header { visibility: hidden; }
+
+/* Keep sidebar collapse/expand button always visible */
+[data-testid="collapsedControl"] {
+    visibility: visible !important;
+    display: flex !important;
+}
+
 .stDeployButton { display: none; }
 
 /* ── Sidebar ─────────────────────────────────────────────────────────────── */
