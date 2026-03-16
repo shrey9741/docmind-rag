@@ -1,29 +1,22 @@
-# ── Core UI ─────────────────────────────────────────────────────────────────
+# ── Core UI ──────────────────────────────────────────────────────────────────
 streamlit==1.36.0
-
 # ── LangChain ecosystem ──────────────────────────────────────────────────────
 langchain==0.3.0
 langchain-community==0.3.0
 langchain-huggingface==0.1.0
 langchain-text-splitters==0.3.0
-
 # ── HuggingFace / Transformers ───────────────────────────────────────────────
 transformers==4.47.0
 sentence-transformers==3.3.0
 huggingface-hub==0.27.0
 tokenizers==0.21.0
-
 # ── Vector store ─────────────────────────────────────────────────────────────
 faiss-cpu==1.13.0
-
 # ── Document parsing ─────────────────────────────────────────────────────────
 PyPDF2==3.0.1
 python-docx==1.1.0
-
 # ── ML / numerics ────────────────────────────────────────────────────────────
 torch==2.5.0
-numpy==2.1.0
-
 # ── Misc ─────────────────────────────────────────────────────────────────────
 accelerate==1.2.0
 python-dotenv==1.0.1
